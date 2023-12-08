@@ -24,6 +24,6 @@ class AuctionMgr {
         void updateBid(double amount, Buyer* Buyer);
         unordered_map<string, double> getBids();
         // send list of preferred buyer
-        Buyer* getAuctionWinner(string name);
-        void closeAuction(Auction* auction);
+        Buyer* getAuctionWinner(unordered_map<string, bool> preferredBuyers);
+        void closeAuction();
 };

@@ -11,7 +11,7 @@ mutex AuctionMgr::mtx;
 unordered_map<string, Auction*> auctionsMap;
 unordered_map<string, double> bidsMap;
 unordered_map<string,bool> preferredBuyers;
-WinningStrategy* WinningStrategy;
+WinningStrategy* winningStrategy;
 bool isOpenForBid= false;
 
 AuctionMgr* AuctionMgr::GetAuctionMgrInstance(){
@@ -47,11 +47,14 @@ void closeAuction(){
     isOpenForBid = false;
 }
 
-Buyer* getAuctionWinner(string name){
-    StrategyMgr* strategyMgr = StrategyMgr::getStrategyMgr();
+Buyer* getAuctionWinner(unordered_map<string, bool> preferredBuyers){
+    if(isOpenForBid){ 
+        cout<<"Auction is still in progress: "<<endl;
+        return NULL;
+    }
 
-    WinningStrategy* name = strategyMgr->determineWinningStrategy();
-    getAuctionWinner(bidsMap, preferredBuyers);
+    StrategyMgr* strategyMgr = StrategyMgr::getStrategyMgr();
+    string name = winningStrategy->findWinner(bidsMap, preferredBuyers);
     auto buyers= BuyerMgr::buyersMap;
     return buyers[name];
 }
